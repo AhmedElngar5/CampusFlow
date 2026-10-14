@@ -1,0 +1,111 @@
+@model StudentManagementPortfolio.Models.StudentListViewModel
+@using StudentManagementPortfolio.Models
+@{ ViewData["Title"] = "Students"; }
+<div class="page-heading">
+    <div>
+        <div class="eyebrow">DIRECTORY</div>
+        <h1>Students</h1>
+        <p class="page-subtitle">Manage student records, departments and enrollment status.</p>
+    </div>
+    <div class="heading-actions">
+        <a asp-action="Export" asp-route-search="@Model.Search" asp-route-department="@Model.Department" asp-route-status="@Model.Status" class="btn btn-light-custom" title="Export filtered results to CSV">
+            <i class="bi bi-download me-1"></i>Export CSV
+        </a>
+        @if (User.IsInRole(AppRoles.Admin))
+        {
+            <a asp-action="Create" class="btn btn-primary-custom">
+                <i class="bi bi-plus-lg me-2"></i>Add new student
+            </a>
+        }
+    </div>
+</div>
+<div class="section-card">
+    <form method="get" asp-action="Index" class="filter-bar">
+        <div class="search-wrap">
+            <i class="bi bi-search"></i>
+            <input type="search" name="search" value="@Model.Search" placeholder="Search name, email or department..." />
+        </div>
+        <select name="department" class="form-select filter-select">
+            <option value="">All departments</option>
+            @foreach (string dept in Model.Departments)
+            {
+                <option value="@dept" selected="@(Model.Department == dept)">@dept</option>
+            }
+        </select>
+        <select name="status" class="form-select filter-select">
+            <option value="">All statuses</option>
+            @foreach (StudentStatus item in Enum.GetValues<StudentStatus>())
+            {
+                <option value="@item" selected="@(Model.Status == item.ToString())">@item</option>
+            }
+        </select>
+        <button class="btn btn-filter" type="submit"><i class="bi bi-funnel me-1"></i>Filter</button>
+        <a class="btn btn-reset" asp-action="Index">Reset</a>
+    </form>
+    <div class="table-responsive">
+        <table class="table custom-table align-middle mb-0">
+            <thead>
+                <tr>
+                    <th><a class="sort-link" asp-action="Index" asp-route-search="@Model.Search" asp-route-department="@Model.Department" asp-route-status="@Model.Status" asp-route-sortBy="name" asp-route-sortDesc="@(Model.SortBy == "name" && !Model.SortDesc)">STUDENT @(Model.SortBy == "name" ? (Model.SortDesc ? "↓" : "↑") : "")</a></th>
+                    <th><a class="sort-link" asp-action="Index" asp-route-search="@Model.Search" asp-route-department="@Model.Department" asp-route-status="@Model.Status" asp-route-sortBy="department" asp-route-sortDesc="@(Model.SortBy == "department" && !Model.SortDesc)">DEPARTMENT @(Model.SortBy == "department" ? (Model.SortDesc ? "↓" : "↑") : "")</a></th>
+                    <th><a class="sort-link" asp-action="Index" asp-route-search="@Model.Search" asp-route-department="@Model.Department" asp-route-status="@Model.Status" asp-route-sortBy="year" asp-route-sortDesc="@(Model.SortBy == "year" && !Model.SortDesc)">YEAR @(Model.SortBy == "year" ? (Model.SortDesc ? "↓" : "↑") : "")</a></th>
+                    <th><a class="sort-link" asp-action="Index" asp-route-search="@Model.Search" asp-route-department="@Model.Department" asp-route-status="@Model.Status" asp-route-sortBy="status" asp-route-sortDesc="@(Model.SortBy == "status" && !Model.SortDesc)">STATUS @(Model.SortBy == "status" ? (Model.SortDesc ? "↓" : "↑") : "")</a></th>
+                    <th><a class="sort-link" asp-action="Index" asp-route-search="@Model.Search" asp-route-department="@Model.Department" asp-route-status="@Model.Status" asp-route-sortBy="date" asp-route-sortDesc="@(Model.SortBy == "date" && !Model.SortDesc)">ENROLLMENT DATE @(Model.SortBy == "date" ? (Model.SortDesc ? "↓" : "↑") : "")</a></th>
+                    <th class="text-end">ACTIONS</th>
+                </tr>
+            </thead>
+            <tbody>
+            @if (Model.Students.Count == 0)
+            {
+                <tr>
+                    <td colspan="6">
+                        <div class="empty-state">
+                            <div class="empty-icon"><i class="bi bi-search"></i></div>
+                            <strong>No students found</strong>
+                            <p>Try changing your search or filters.</p>
+                            @if (User.IsInRole(AppRoles.Admin))
+                            {
+                                <a asp-action="Create" class="btn btn-primary-custom">Add a student</a>
+                            }
+                        </div>
+                    </td>
+                </tr>
+            }
+            @foreach (var student in Model.Students)
+            {
+                <tr>
+                    <td><div class="student-cell"><div class="student-avatar">@student.FullName[..1].ToUpperInvariant()</div><div><strong>@student.FullName</strong><small>@student.Email</small></div></div></td>
+                    <td>@student.Department</td>
+                    <td>Year @student.Year</td>
+                    <td><span class="status-badge @student.Status.ToString().ToLowerInvariant()">@student.Status</span></td>
+                    <td>@student.EnrollmentDate.ToString("dd MMM yyyy")</td>
+                    <td>
+                        <div class="action-group">
+                            <a asp-action="Details" asp-route-id="@student.Id" title="Details"><i class="bi bi-eye"></i> View</a>
+                            @if (User.IsInRole(AppRoles.Admin))
+                            {
+                                <a asp-action="Edit" asp-route-id="@student.Id" title="Edit"><i class="bi bi-pencil"></i> Edit</a>
+                                <a asp-action="Delete" asp-route-id="@student.Id" class="danger-link" title="Delete"><i class="bi bi-trash"></i> Delete</a>
+                            }
+                        </div>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+    <div class="pagination-row">
+        <span>Showing @Model.Students.Count of @Model.TotalCount student(s)</span>
+        <div class="pagination-controls">
+            @if (Model.Page > 1)
+            {
+                <a asp-action="Index" asp-route-search="@Model.Search" asp-route-department="@Model.Department" asp-route-status="@Model.Status" asp-route-sortBy="@Model.SortBy" asp-route-sortDesc="@Model.SortDesc" asp-route-page="@(Model.Page - 1)" class="page-btn">← Previous</a>
+            }
+            <span class="page-count">Page @Model.Page of @Model.TotalPages</span>
+            @if (Model.Page < Model.TotalPages)
+            {
+                <a asp-action="Index" asp-route-search="@Model.Search" asp-route-department="@Model.Department" asp-route-status="@Model.Status" asp-route-sortBy="@Model.SortBy" asp-route-sortDesc="@Model.SortDesc" asp-route-page="@(Model.Page + 1)" class="page-btn">Next →</a>
+            }
+        </div>
+    </div>
+</div>

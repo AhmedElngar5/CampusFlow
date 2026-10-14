@@ -1,0 +1,23 @@
+@model StudentManagementPortfolio.Models.StudentViewModel
+@{ ViewData["Title"] = "Edit Student"; }
+<div class="page-heading">
+    <div>
+        <div class="eyebrow">STUDENT DIRECTORY / EDIT</div>
+        <h1>Edit student</h1>
+        <p class="page-subtitle">Update the student's information below.</p>
+    </div>
+    <a asp-action="Index" class="btn btn-light-custom"><i class="bi bi-arrow-left me-1"></i>Back to students</a>
+</div>
+<div class="section-card form-card">
+    <div class="section-header">
+        <div><h2>Student information</h2><p>Student ID: #@ViewBag.StudentId</p></div>
+    </div>
+    <form asp-action="Edit" asp-route-id="@ViewBag.StudentId" method="post">
+        <partial name="_StudentForm" model="Model" />
+        <div class="form-actions">
+            <a asp-action="Index" class="btn btn-light-custom">Cancel</a>
+            <button type="submit" class="btn btn-primary-custom">Save changes <i class="bi bi-arrow-right ms-2"></i></button>
+        </div>
+    </form>
+</div>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

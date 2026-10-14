@@ -1,0 +1,73 @@
+## ===================================================================
+## ASP.NET Core & .NET Comprehensive .gitignore
+## ===================================================================
+
+# Build and Binary Outputs
+[Bb]in/
+[Oo]bj/
+[Aa]rm/
+[Aa]rm64/
+x64/
+x86/
+[Dd]ebug/
+[Rr]elease/
+[Bb]ld/
+[Tt]emp/
+publish/
+
+# Visual Studio & IDE Caches
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.csproj.user
+.idea/
+.vscode/
+*.swp
+*.*~
+
+# User Secrets & Local Production Overrides
+secrets.json
+appsettings.*.local.json
+appsettings.Production.json
+*.env
+*.env.local
+
+# Database Data Files (Prevent checking in live LocalDB / SQL files)
+*.mdf
+*.ldf
+*.ndf
+*.db
+*.db-shm
+*.db-wal
+
+# Logs & Diagnostics
+*.log
+[Ll]ogs/
+[Ll]og/
+*.svclog
+TestResults/
+_ReSharper*/
+*.DotSettings.user
+
+# Operating System Files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# NuGet Packages
+*.nupkg
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+**/packages/*
+!**/packages/build/
+
+# Critical Inclusions (Never exclude code migrations or base configurations)
+!**/Migrations/*.cs
+!**/appsettings.json
+!**/appsettings.example.json

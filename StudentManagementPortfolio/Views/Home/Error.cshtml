@@ -1,0 +1,12 @@
+@{ ViewData["Title"] = ViewBag.Title ?? "Error"; }
+<div class="error-page">
+    <div class="error-card">
+        <div class="error-code">@ViewBag.StatusCode</div>
+        <h1>@(ViewBag.Title ?? "Something went wrong")</h1>
+        <p>@ViewBag.Message</p>
+        <div class="error-actions">
+            <a asp-controller="Dashboard" asp-action="Index" class="btn btn-primary-custom">Go to Dashboard</a>
+            <a asp-controller="Students" asp-action="Index" class="btn btn-light-custom">View Students</a>
+        </div>
+    </div>
+</div>

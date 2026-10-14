@@ -1,0 +1,71 @@
+@model StudentManagementPortfolio.Models.SetupAdminViewModel
+@{
+    ViewData["Title"] = "Initial Administrator Setup";
+}
+
+<div class="auth-wrapper">
+    <div class="auth-card">
+        <div class="auth-header">
+            <div class="auth-brand-mark bg-warning text-dark">
+                <i class="bi bi-shield-plus"></i>
+            </div>
+            <div class="eyebrow">FIRST-TIME INITIALIZATION</div>
+            <h1>Create Administrator</h1>
+            <p class="page-subtitle">Configure the root administrator account for this CampusFlow instance.</p>
+        </div>
+
+        <div class="alert alert-light border d-flex align-items-start mb-4" role="alert">
+            <i class="bi bi-shield-check text-primary me-2 fs-5 mt-1"></i>
+            <div class="small text-secondary">
+                This setup wizard is only available once when no administrator exists. It creates a full-privilege <strong>Admin</strong> account with hashed credentials.
+            </div>
+        </div>
+
+        <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+
+        <form asp-action="Setup" method="post" class="auth-form">
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label"></label>
+                <div class="input-icon-wrap">
+                    <i class="bi bi-envelope"></i>
+                    <input asp-for="Email" class="form-control form-control-custom" placeholder="admin@school.edu" autofocus />
+                </div>
+                <span asp-validation-for="Email" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Password" class="form-label"></label>
+                <div class="input-icon-wrap">
+                    <i class="bi bi-key"></i>
+                    <input asp-for="Password" class="form-control form-control-custom" placeholder="Create strong password (min. 6 characters)" />
+                </div>
+                <span asp-validation-for="Password" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-4">
+                <label asp-for="ConfirmPassword" class="form-label"></label>
+                <div class="input-icon-wrap">
+                    <i class="bi bi-shield-lock"></i>
+                    <input asp-for="ConfirmPassword" class="form-control form-control-custom" placeholder="Confirm your password" />
+                </div>
+                <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary-custom w-100 justify-content-center py-2">
+                <span>Create Administrator &amp; Sign In</span>
+                <i class="bi bi-arrow-right ms-2"></i>
+            </button>
+        </form>
+
+        <div class="text-center mt-3">
+            <a asp-action="Login" class="text-muted small text-decoration-none">
+                <i class="bi bi-arrow-left me-1"></i> Back to sign in
+            </a>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+

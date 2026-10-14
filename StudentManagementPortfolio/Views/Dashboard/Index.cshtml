@@ -1,0 +1,119 @@
+@model StudentManagementPortfolio.Models.DashboardViewModel
+@using StudentManagementPortfolio.Models
+@{ ViewData["Title"] = "Dashboard"; }
+<div class="page-heading">
+    <div>
+        <div class="eyebrow">OVERVIEW</div>
+        <h1>Dashboard</h1>
+        <p class="page-subtitle">Here's what's happening across your student community.</p>
+    </div>
+    @if (User.IsInRole(AppRoles.Admin))
+    {
+        <a asp-controller="Students" asp-action="Create" class="btn btn-primary-custom">
+            <i class="bi bi-plus-lg me-2"></i>Add new student
+        </a>
+    }
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-top"><span>Total students</span><span class="stat-icon icon-blue"><i class="bi bi-people"></i></span></div>
+        <div class="stat-number">@Model.TotalStudents</div>
+        <div class="stat-foot">Registered student records</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-top"><span>Active students</span><span class="stat-icon icon-green"><i class="bi bi-check-circle"></i></span></div>
+        <div class="stat-number">@Model.ActiveStudents</div>
+        <div class="stat-foot"><span class="mini-dot green"></span> Currently enrolled</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-top"><span>Graduated</span><span class="stat-icon icon-purple"><i class="bi bi-mortarboard"></i></span></div>
+        <div class="stat-number">@Model.GraduatedStudents</div>
+        <div class="stat-foot">Completed their studies</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-top"><span>Departments</span><span class="stat-icon icon-orange"><i class="bi bi-building"></i></span></div>
+        <div class="stat-number">@Model.DepartmentCount</div>
+        <div class="stat-foot">Across student records</div>
+    </div>
+</div>
+
+@if (Model.EnrolledThisMonth > 0)
+{
+<div class="section-card mt-4">
+    <div class="section-header">
+        <div><h2><i class="bi bi-calendar-check me-2"></i>This month</h2><p>@Model.EnrolledThisMonth new enrollment(s) this month</p></div>
+    </div>
+</div>
+}
+
+<div class="row mt-4 g-4">
+    <div class="col-lg-8">
+        <div class="section-card">
+            <div class="section-header">
+                <div><h2>Recently enrolled</h2><p>Latest student records in your system</p></div>
+                <a asp-controller="Students" asp-action="Index" class="text-link">View all students <span>→</span></a>
+            </div>
+            <div class="table-responsive">
+                <table class="table custom-table align-middle mb-0">
+                    <thead>
+                        <tr><th>STUDENT</th><th>DEPARTMENT</th><th>YEAR</th><th>STATUS</th><th>ENROLLMENT DATE</th><th></th></tr>
+                    </thead>
+                    <tbody>
+                    @if (Model.RecentStudents.Count == 0)
+                    {
+                        <tr><td colspan="6"><div class="empty-state"><div class="empty-icon"><i class="bi bi-inbox"></i></div><strong>No students yet</strong><p>Add your first student to get started.</p>
+                        @if (User.IsInRole(AppRoles.Admin))
+                        {
+                            <a asp-controller="Students" asp-action="Create" class="btn btn-primary-custom">Add a student</a>
+                        }
+                        </div></td></tr>
+                    }
+                    @foreach (var student in Model.RecentStudents)
+                    {
+                        <tr>
+                            <td><div class="student-cell"><div class="student-avatar">@student.FullName[..1].ToUpperInvariant()</div><div><strong>@student.FullName</strong><small>@student.Email</small></div></div></td>
+                            <td>@student.Department</td>
+                            <td>Year @student.Year</td>
+                            <td><span class="status-badge @student.Status.ToString().ToLowerInvariant()">@student.Status</span></td>
+                            <td>@student.EnrollmentDate.ToString("dd MMM yyyy")</td>
+                            <td><a class="table-action" asp-controller="Students" asp-action="Details" asp-route-id="@student.Id" title="View details"><i class="bi bi-arrow-up-right"></i></a></td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="section-card">
+            <div class="section-header">
+                <div><h2>By department</h2><p>Student distribution</p></div>
+            </div>
+            <div class="dept-list">
+                @foreach (var dept in Model.DepartmentStats)
+                {
+                    var pct = Model.TotalStudents > 0 ? (int)Math.Round(100.0 * dept.Count / Model.TotalStudents) : 0;
+                    <div class="dept-item">
+                        <div class="dept-info"><span class="dept-name">@dept.Department</span><span class="dept-count">@dept.Count student(s)</span></div>
+                        <div class="dept-bar"><div class="dept-bar-fill" style="width:@(pct)%"></div></div>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="section-card mt-4">
+            <div class="section-header">
+                <div><h2>Quick actions</h2><p>Common operations</p></div>
+            </div>
+            <div class="quick-actions">
+                @if (User.IsInRole(AppRoles.Admin))
+                {
+                    <a asp-controller="Students" asp-action="Create" class="quick-link"><i class="bi bi-person-plus"></i> Add new student</a>
+                    <a asp-controller="Account" asp-action="Users" class="quick-link"><i class="bi bi-shield-lock"></i> Manage user accounts</a>
+                }
+                <a asp-controller="Students" asp-action="Index" class="quick-link"><i class="bi bi-list-ul"></i> View all students</a>
+                <a asp-controller="Students" asp-action="Export" class="quick-link"><i class="bi bi-download"></i> Export to CSV</a>
+            </div>
+        </div>
+    </div>
+</div>

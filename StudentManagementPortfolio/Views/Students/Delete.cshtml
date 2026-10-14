@@ -1,0 +1,26 @@
+@model Student
+@{ ViewData["Title"] = "Delete Student"; }
+<div class="page-heading">
+    <div>
+        <div class="eyebrow">STUDENT DIRECTORY</div>
+        <h1>Delete student</h1>
+        <p class="page-subtitle">Review this record before confirming deletion.</p>
+    </div>
+    <a asp-action="Index" class="btn btn-light-custom"><i class="bi bi-arrow-left me-1"></i>Back to students</a>
+</div>
+<div class="section-card delete-card">
+    <div class="delete-symbol"><i class="bi bi-exclamation-triangle"></i></div>
+    <h2>Delete @Model.FullName?</h2>
+    <p>This action will permanently remove this student record. This cannot be undone.</p>
+    <div class="delete-student">
+        <div class="student-avatar">@Model.FullName[..1].ToUpperInvariant()</div>
+        <div><strong>@Model.FullName</strong><small>@Model.Email · @Model.Department</small></div>
+    </div>
+    <form asp-action="Delete" method="post">
+        <input type="hidden" asp-for="Id" />
+        <div class="form-actions centered">
+            <a asp-action="Index" class="btn btn-light-custom">Cancel</a>
+            <button type="submit" class="btn btn-danger"><i class="bi bi-trash me-1"></i>Yes, delete student</button>
+        </div>
+    </form>
+</div>

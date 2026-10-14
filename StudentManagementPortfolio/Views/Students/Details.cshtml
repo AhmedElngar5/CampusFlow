@@ -1,0 +1,41 @@
+@model Student
+@using StudentManagementPortfolio.Models
+@{ ViewData["Title"] = "Student Details"; }
+<div class="page-heading">
+    <div>
+        <div class="eyebrow">STUDENT DIRECTORY / PROFILE</div>
+        <h1>Student profile</h1>
+        <p class="page-subtitle">Review the details for this student record.</p>
+    </div>
+    <div class="heading-actions">
+        <a asp-action="Index" class="btn btn-light-custom"><i class="bi bi-arrow-left me-1"></i>Back</a>
+        @if (User.IsInRole(AppRoles.Admin))
+        {
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary-custom"><i class="bi bi-pencil me-1"></i>Edit student</a>
+        }
+    </div>
+</div>
+<div class="section-card profile-card">
+    <div class="profile-hero">
+        <div class="profile-avatar">@Model.FullName[..1].ToUpperInvariant()</div>
+        <div>
+            <h2>@Model.FullName</h2>
+            <p>@Model.Email</p>
+            <span class="status-badge @Model.Status.ToString().ToLowerInvariant()">@Model.Status</span>
+        </div>
+        <div class="profile-id">STUDENT ID<strong>#@Model.Id.ToString("D4")</strong></div>
+    </div>
+    <div class="profile-details">
+        <div><span>Department</span><strong>@Model.Department</strong></div>
+        <div><span>Academic year</span><strong>Year @Model.Year</strong></div>
+        <div><span>Phone number</span><strong>@(string.IsNullOrWhiteSpace(Model.PhoneNumber) ? "Not provided" : Model.PhoneNumber)</strong></div>
+        <div><span>Enrollment date</span><strong>@Model.EnrollmentDate.ToString("dd MMMM yyyy")</strong></div>
+    </div>
+</div>
+@if (User.IsInRole(AppRoles.Admin))
+{
+    <div class="profile-actions">
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-light-custom"><i class="bi bi-pencil me-1"></i>Edit</a>
+        <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-outline-danger"><i class="bi bi-trash me-1"></i>Delete</a>
+    </div>
+}

@@ -1,0 +1,24 @@
+@model StudentManagementPortfolio.Models.StudentViewModel
+@{ ViewData["Title"] = "Add Student"; }
+<div class="page-heading">
+    <div>
+        <div class="eyebrow">STUDENT DIRECTORY</div>
+        <h1>Add a student</h1>
+        <p class="page-subtitle">Create a new student record in your school workspace.</p>
+    </div>
+    <a asp-action="Index" class="btn btn-light-custom"><i class="bi bi-arrow-left me-1"></i>Back to students</a>
+</div>
+<div class="section-card form-card">
+    <div class="section-header">
+        <div><h2>Student information</h2><p>Fields marked as required must be completed.</p></div>
+        <span class="required-note">* Required fields</span>
+    </div>
+    <form asp-action="Create" method="post">
+        <partial name="_StudentForm" model="Model" />
+        <div class="form-actions">
+            <a asp-action="Index" class="btn btn-light-custom">Cancel</a>
+            <button type="submit" class="btn btn-primary-custom">Save student <i class="bi bi-arrow-right ms-2"></i></button>
+        </div>
+    </form>
+</div>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }
