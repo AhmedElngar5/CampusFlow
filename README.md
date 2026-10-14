@@ -271,7 +271,7 @@ This project is licensed under the **MIT License** — see the [LICENSE](LICENSE
 
 Developed by **Ahmed** as a showcase project demonstrating enterprise-grade ASP.NET Core architecture, secure role-based authorization, and modern UI engineering.
 
-- **GitHub**: [https://github.com/AhmedElngar5/CampusFlow)
+- **GitHub**: [https://github.com/AhmedElngar5)
 
 - **LinkedIn**: [www.linkedin.com/in/ahmed-elngar-3251b5375)
 
